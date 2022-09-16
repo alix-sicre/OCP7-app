@@ -7,3 +7,4 @@ streamlit==1.12.2
 cloudpickle==2.0.0  
 pickleshare==0.7.5 
 shap==0.41.0 
+lightgbm
