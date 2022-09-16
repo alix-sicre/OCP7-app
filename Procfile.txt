@@ -1,2 +1,1 @@
-
-web: gunicorn processWebhook:app.py --log-file -
+web: gunicorn app.py
