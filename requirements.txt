@@ -8,3 +8,4 @@ cloudpickle==2.0.0
 pickleshare==0.7.5 
 shap==0.41.0 
 lightgbm==3.3.2
+gunicorn
