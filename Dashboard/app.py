@@ -57,14 +57,22 @@ def shap_plot(idx):
     sns.barplot(data=shap_df, x=shap_df["values"], y='index')
     return fig
 
+def get_result(idx) : 
+    r = requests.get(url='https://ocp7-app.herokuapp.com//predict?status='+str(int(idx)))
+    acc = [r.json()['Accept']]
+    ref = [r.json()['Refuse']]
+    if acc[0] >=0.90: 
+        return 'VALIDE'
+    else : 
+        return 'REFUSE'
 def main():
 
 
     st.title("Project 7 Dashboard")
 
     st.header("Cleaned Data:")
-    X = pd.read_csv("X.csv")
-    X = X.drop(columns = ['Unnamed: 0'])
+    #X = pd.read_csv("X.csv")
+   # X = X.drop(columns = ['Unnamed: 0'])
 
     X_w_ID = pd.read_csv("X_w_ID.csv")
     X_w_ID = X_w_ID.drop(columns = ['Unnamed: 0'])
@@ -92,14 +100,27 @@ def main():
 
     if st.checkbox('Show correlation matrix'):
         fig5 = correlation_matrix(df)
-        st.pyplot(fig5) #,  use_container_width=True
-
+        st.pyplot(fig5)
+    
     idx = st.selectbox('Wich ID ?',df.index)
-
+####
+    st.header("Distributions:")
+    choice = st.selectbox("Column name", df.columns)
+    client_value = df.loc[idx, choice]
+    
+    st.title('Full distribution')
+    fig1 = distribution(df, choice, client_value)
+    st.pyplot(fig1)
+       
+        
+     #####     
     st.header("Prediction :")
     fig1 = get_model_prediction(idx)
     st.plotly_chart(fig1,  use_container_width=True)
 
+    st.header("Le crédit est... :")
+    st.text(get_result(idx))
+    
     st.header("Explanation :")
     fig2 = shap_plot(idx)
     st.pyplot(fig2)
